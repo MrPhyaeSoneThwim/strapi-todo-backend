@@ -7,7 +7,55 @@ module.exports = {
    *
    * This gives you an opportunity to extend code.
    */
-  register(/*{ strapi }*/) {},
+  register({ strapi }) {
+    const extensionService = strapi.plugin("graphql").service("extension");
+
+    extensionService.use(
+      ({ nexus: { objectType, nonNull, extendType, inputObjectType } }) => {
+        const StreetInput = inputObjectType({
+          name: "StreetInput",
+          definition(t) {
+            t.string("street");
+          },
+        });
+
+        const types = [
+          objectType({
+            name: "Address",
+            definition(t) {
+              t.string("street");
+            },
+          }),
+        ];
+
+        const queries = extendType({
+          type: "Query",
+          definition(t) {
+            t.field("address", {
+              type: "Address",
+              args: {
+                input: nonNull(StreetInput),
+              },
+              resolve(parent, args, context) {
+                return {
+                  street: `My place is on ${args.input.street}.`,
+                };
+              },
+            });
+          },
+        });
+        const resolversConfig = {
+          "Query.address": {
+            auth: false,
+          },
+        };
+        return {
+          types: [types, queries],
+          resolversConfig,
+        };
+      }
+    );
+  },
 
   /**
    * An asynchronous bootstrap function that runs before
