@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tasks",
+  "info": {
+    "singularName": "task",
+    "pluralName": "tasks",
+    "displayName": "Task"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "todo": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::todo.todo",
+      "inversedBy": "tasks"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "finished": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}
