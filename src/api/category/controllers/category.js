@@ -10,7 +10,7 @@ module.exports = createCoreController(
   "api::category.category",
   ({ strapi }) => ({
     async testPostRequest(ctx) {
-      ctx.send("Hello, welcome from test post request.");
+      ctx.send(`Test Passed: ${ctx.request.body.name}`);
     },
     async testGetRequest(ctx) {
       ctx.send("Hello, welcome from test get request.");
